@@ -18,19 +18,23 @@ client.connect(err => {
     const carsCollection = client.db("carHouse").collection("cars");
     const ordersCollection = client.db("carHouse").collection("orders");
 
+    app.get('/', (req, res) => {
+        res.send('yah, i am working')
+    })
+
     app.get('/cars', (req, res) => {
         carsCollection.find()
             .toArray((err, items) => {
                 res.send(items)
             })
     })
-    
-   app.get('/car/:id', (req, res) => {
-       carsCollection.find({_id: ObjectId(req.params.id)})
-       .toArray( (err, documents) => {
-           res.send(documents);
-       })
-   })
+
+    app.get('/car/:id', (req, res) => {
+        carsCollection.find({ _id: ObjectId(req.params.id) })
+            .toArray((err, documents) => {
+                res.send(documents);
+            })
+    })
 
     app.post('/addCar', (req, res) => {
         const newCar = req.body;
@@ -46,21 +50,21 @@ client.connect(err => {
                 res.send(result.insertedCount > 0);
             })
     })
-    
+
     app.get('/orders', (req, res) => {
-        ordersCollection.find({email: req.query.email})
+        ordersCollection.find({ email: req.query.email })
             .toArray((err, items) => {
                 res.send(items)
             })
     })
 
     app.delete('/delete/:id', (req, res) => {
-        carsCollection.deleteOne({_id: ObjectId(req.params.id)})
-        .then( result =>{
-            console.log(result)
-        })
+        carsCollection.deleteOne({ _id: ObjectId(req.params.id) })
+            .then(result => {
+                console.log(result)
+            })
     })
 
 });
 
-app.listen( process.env.PORT || port)
+app.listen(process.env.PORT || port)
